@@ -21,7 +21,7 @@ jobs:
     steps:
       - checkout
       - run: git submodule update --init --recursive
-      - run: make -C src/ledger-user
+      - run: make -C src/ledger
 
 workflows:
   version: 2
