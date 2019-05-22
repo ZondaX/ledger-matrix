@@ -29,22 +29,35 @@ string(APPEND CMAKE_LINKER_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-poin
 ##############################################################
 #  static libs
 file(GLOB_RECURSE JSMN_SRC
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src/jsmn.c
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src/jsmn.c
         )
 
 file(GLOB_RECURSE LIB_SRC
-        src/ledger/src/lib/json_parser.c
-        src/ledger/src/lib/tx_parser.c
-        src/ledger/src/lib/tx_display.c
-        src/ledger/src/lib/tx_validate.c
+        tests/keccak-tiny.c
+        src/ledger/src/lib/crypto.c
+        src/ledger/src/lib/base58.c
+#        src/ledger/src/lib/json_parser.c
+#        src/ledger/src/lib/tx_parser.c
+#        src/ledger/src/lib/tx_display.c
+#        src/ledger/src/lib/tx_validate.c
         )
 file(GLOB_RECURSE TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp)
 
-add_library(json_parser STATIC ${LIB_SRC} ${JSMN_SRC})
-target_include_directories(json_parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src)
+add_library(app_lib STATIC ${LIB_SRC} ${JSMN_SRC})
+target_include_directories(app_lib PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/ledger-zxlib/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/lib
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src
+        )
 
 add_executable(tests ${TESTS_SRC})
-target_link_libraries(tests gtest_main json_parser)
+target_include_directories(tests PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src
+        ${gtest_SOURCE_DIR}/include
+        ${gmock_SOURCE_DIR}/include
+        )
+target_link_libraries(tests gtest_main app_lib)
+target_link_libraries(tests gtest_main)
 
 add_test(gtest ${PROJECT_BINARY_DIR}/tests)
 
