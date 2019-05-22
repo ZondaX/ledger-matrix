@@ -50,16 +50,16 @@ target_include_directories(app_lib PUBLIC
 #        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src
         )
 
-add_executable(tests ${TESTS_SRC})
-target_include_directories(tests PRIVATE
+add_executable(unittests ${TESTS_SRC})
+target_include_directories(unittests PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src
         ${gtest_SOURCE_DIR}/include
         ${gmock_SOURCE_DIR}/include
         )
-target_link_libraries(tests gtest_main app_lib)
-target_link_libraries(tests gtest_main)
+target_link_libraries(unittests gtest_main app_lib)
+target_link_libraries(unittests gtest_main)
 
-add_test(gtest ${PROJECT_BINARY_DIR}/tests)
+add_test(gtest ${PROJECT_BINARY_DIR}/unittests)
 
 ###############################################################
 # Force tests to depend from app compiling
