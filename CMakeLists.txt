@@ -37,6 +37,7 @@ file(GLOB_RECURSE LIB_SRC
         src/ledger/src/lib/crypto.c
         src/ledger/src/lib/base58.c
         src/ledger/src/lib/rlp.c
+        src/ledger/src/lib/mantx.c
 #        src/ledger/src/lib/json_parser.c
 #        src/ledger/src/lib/tx_parser.c
 #        src/ledger/src/lib/tx_display.c
