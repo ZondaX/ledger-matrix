@@ -98,26 +98,28 @@ TEST_P(MANTxParamTest, stream) {
 
     char out[1000];
     mantx_print(&ctx, data, MANTX_FIELD_NONCE, out, 1000);
-    std::cout << out << std::endl;
+    std::cout << maxtx_getFieldName(MANTX_FIELD_NONCE) << " " << out << std::endl;
+}
 
-    mantx_print(&ctx, data, MANTX_FIELD_GASPRICE, out, 1000);
-    std::cout << out << std::endl;
+TEST_P(MANTxParamTest, iterateDisplayStream) {
+    auto params = GetParam();
 
-    mantx_print(&ctx, data, MANTX_FIELD_GASLIMIT, out, 1000);
-    std::cout << out << std::endl;
+    uint8_t data[10000];
+    uint16_t dataSize = parseHexString(params.data, data);
 
-    mantx_print(&ctx, data, MANTX_FIELD_VALUE, out, 1000);
-    std::cout << out << std::endl;
+    mantx_context_t ctx;
+    auto err = mantx_parse(&ctx, data, dataSize);
+    EXPECT_THAT(err, testing::Eq(MANTX_NO_ERROR));
 
-    mantx_print(&ctx, data, MANTX_FIELD_V, out, 1000);
-    std::cout << out << std::endl;
+    std::cout << std::endl;
 
-    mantx_print(&ctx, data, MANTX_FIELD_R, out, 1000);
-    std::cout << out << std::endl;
+    char displayKey[1000];
+    char displayValue[1000];
 
-    mantx_print(&ctx, data, MANTX_FIELD_S, out, 1000);
-    std::cout << out << std::endl;
-
-    mantx_print(&ctx, data, MANTX_FIELD_COMMITTIME, out, 1000);
-    std::cout << out << std::endl;
+    for(int8_t displayIdx = 0; displayIdx<13; displayIdx++ ){
+        err = mantx_getItem(&ctx, data, displayIdx, displayKey, 1000, displayValue, 1000);
+        if (err == MANTX_NO_ERROR) {
+            std::cout << displayKey << " = " << displayValue << std::endl;
+        }
+    }
 }
