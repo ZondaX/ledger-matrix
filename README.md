@@ -1,6 +1,6 @@
 # Ledger-MatrixAI
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![CircleCI](https://circleci.com/gh/zondax/ledger-matrixai/tree/master.svg?style=shield)](https://circleci.com/gh/matrixai/ledger-matrixai/tree/master)
+[![CircleCI](https://circleci.com/gh/ZondaX/ledger-matrixai.svg?style=shield)](https://circleci.com/gh/ZondaX/ledger-matrixai)
 
 This repository contains the Ledger Nano S/X app for Matrix AI:
 
@@ -9,7 +9,7 @@ This repository contains the Ledger Nano S/X app for Matrix AI:
 
 Source code for apps is linked as submodules to allow for Ledger's build infrastructure.
 
-For development purposes, this repo is recommended as it includes unit tests, tools, etc.  
+For development purposes, this repo is recommended as it includes unit tests, tools, etc.
 
 ---------------------
 ## Building
