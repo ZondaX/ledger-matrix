@@ -51,14 +51,17 @@ clean:
 	make -C $(LEDGER_SRC) clean
 
 load: build
+	SCP_PRIVKEY=$(SCP_PRIVKEY) \
 	BOLOS_SDK=$(CURDIR)/deps/nanos-secure-sdk BOLOS_ENV=/opt/bolos \
 	make -C $(LEDGER_SRC) load
 
 load2: build2
+	SCP_PRIVKEY=$(SCP_PRIVKEY) \
 	BOLOS_SDK=$(CURDIR)/deps/nano2-sdk BOLOS_ENV=/opt/bolos \
 	make -C $(LEDGER_SRC) load
 
 delete:
+	SCP_PRIVKEY=$(SCP_PRIVKEY) \
 	BOLOS_SDK=$(CURDIR)/deps/nanos-secure-sdk BOLOS_ENV=/opt/bolos \
 	make -C $(LEDGER_SRC) delete
 
