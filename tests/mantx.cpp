@@ -71,7 +71,9 @@ INSTANTIATE_TEST_SUITE_P(
                       "80" // Enter Type
                       "80" // IsEntrust
                       "86016850894a0f" // Commit Time
-                      "c4c30580c0", // ExtraTo
+                      "c4" // ExtraTo List - embeds a list
+                      "c3" // ExtraTo embedded list
+                      "0580c0",  // byte, string, list
             //////////// expected output:
                       "Nonce = 0\n"
                       "Gas Price = 18000000000\n"
@@ -145,7 +147,7 @@ TEST_P(MANTxParamTest, stream) {
 
     char out[1000];
     mantx_print(&ctx, data, MANTX_FIELD_TO, out, 1000);
-    std::cout << maxtx_getFieldName(MANTX_FIELD_TO) << " " << out << std::endl;
+    std::cout << "To:" << " " << out << std::endl;
 }
 
 TEST_P(MANTxParamTest, iterateDisplayStream) {

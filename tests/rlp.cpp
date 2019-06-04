@@ -216,7 +216,7 @@ TEST_P(RLPStreamParamTest, streamReadValues) {
                 break;
             }
             case RLP_KIND_STRING: {
-                uint8_t value[1000];
+                char value[1000];
                 err = rlp_readString(data, currentField, value, sizeof(value));
                 EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
                 ss << (char *) value;
