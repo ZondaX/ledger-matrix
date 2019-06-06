@@ -103,19 +103,19 @@ INSTANTIATE_TEST_SUITE_P(
     InstantiationName,
     RLPStreamParamTest,
     Values(
-        RLPStreamTestCase{"byte_5", "05", 1, "BYTE@0|0[0]", "BYTE=5"},
-        RLPStreamTestCase{"byte_6", "06", 1, "BYTE@0|0[0]", "BYTE=6"},
-        RLPStreamTestCase{"string_empty", "80", 1, "STRING@0|1[0]", "STRING="},
-        RLPStreamTestCase{"string", "820505", 1, "STRING@0|1[2]", "STRING=\x5\x5"},
-        RLPStreamTestCase{"string", "83050505", 1, "STRING@0|1[3]", "STRING=\x5\x5\x5"},
-        RLPStreamTestCase{"string", "8405050505", 1, "STRING@0|1[4]", "STRING=\x5\x5\x5\x5"},
-        RLPStreamTestCase{"string", "850505050505", 1, "STRING@0|1[5]", "STRING=\x5\x5\x5\x5\x5"},
-        RLPStreamTestCase{"string", "8D6162636465666768696A6B6C6D", 1, "STRING@0|1[13]", "STRING=abcdefghijklm"},
-        RLPStreamTestCase{"string", "820505820505", 2, "STRING@0|1[2]STRING@3|1[2]", "STRING=\x5\x5"},
+        RLPStreamTestCase{"byte_5", "05", 1, "BYTE@0[0|0]", "BYTE=5"},
+        RLPStreamTestCase{"byte_6", "06", 1, "BYTE@0[0|0]", "BYTE=6"},
+        RLPStreamTestCase{"string_empty", "80", 1, "STRING@0[1|0]", "STRING="},
+        RLPStreamTestCase{"string", "820505", 1, "STRING@0[1|2]", "STRING=\x5\x5"},
+        RLPStreamTestCase{"string", "83050505", 1, "STRING@0[1|3]", "STRING=\x5\x5\x5"},
+        RLPStreamTestCase{"string", "8405050505", 1, "STRING@0[1|4]", "STRING=\x5\x5\x5\x5"},
+        RLPStreamTestCase{"string", "850505050505", 1, "STRING@0[1|5]", "STRING=\x5\x5\x5\x5\x5"},
+        RLPStreamTestCase{"string", "8D6162636465666768696A6B6C6D", 1, "STRING@0[1|13]", "STRING=abcdefghijklm"},
+        RLPStreamTestCase{"string", "820505820505", 2, "STRING@0[1|2]STRING@3[1|2]", "STRING=\x5\x5"},
         // [5, '444']
-        RLPStreamTestCase{"list", "C50583343434", 1, "LIST@0|1[5]", "LIST=BYTE@0|0[0]STRING@1|1[3]"},
+        RLPStreamTestCase{"list", "C50583343434", 1, "LIST@0[1|5]", "LIST=BYTE@1[0|0]STRING@2[1|3]"},
         // [1, [2, [3, ]]]
-        RLPStreamTestCase{"list", "C601C402C203C0", 1, "LIST@0|1[6]", "LIST=BYTE@0|0[0]LIST@1|1[4]"},
+        RLPStreamTestCase{"list", "C601C402C203C0", 1, "LIST@0[1|6]", "LIST=BYTE@1[0|0]LIST@2[1|4]"},
         // matrix tx
         RLPStreamTestCase{"list",
                           "f901e180850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485a767950514b33634"
@@ -130,21 +130,21 @@ INSTANTIATE_TEST_SUITE_P(
                           "275737453657454797065223a302c22757365537461727454696d65223a22222c22757365456e6454696d6522"
                           "3a22222c22456e7472757374436f756e74223a307d5d038080808086016850894a0fc4c30580c0",
                           1,
-                          "LIST@0|3[481]",
+                          "LIST@0[3|481]",
                           "LIST="
-                          "STRING@0|1[0]"
-                          "STRING@1|1[5]"
-                          "STRING@7|1[3]"
-                          "STRING@11|1[32]"
-                          "STRING@44|1[3]"
-                          "STRING@48|3[413]"
-                          "BYTE@464|0[0]"
-                          "STRING@465|1[0]"
-                          "STRING@466|1[0]"
-                          "STRING@467|1[0]"
-                          "STRING@468|1[0]"
-                          "STRING@469|1[6]"
-                          "LIST@476|1[4]"}
+                          "STRING@3[1|0]"
+                          "STRING@4[1|5]"
+                          "STRING@10[1|3]"
+                          "STRING@14[1|32]"
+                          "STRING@47[1|3]"
+                          "STRING@51[3|413]"
+                          "BYTE@467[0|0]"
+                          "STRING@468[1|0]"
+                          "STRING@469[1|0]"
+                          "STRING@470[1|0]"
+                          "STRING@471[1|0]"
+                          "STRING@472[1|6]"
+                          "LIST@479[1|4]"}
     ),
     RLPStreamParamTest::PrintToStringParamName()
 );
@@ -167,7 +167,7 @@ std::string dumpRLPFields(rlp_field_t *fields, uint8_t fieldCount) {
     for (int i = 0; i < fieldCount; i++) {
         rlp_field_t *f = fields + i;
         ss << getKind(f->kind) << "@";
-        ss << f->fieldOffset << "|" << f->valueOffset << "[" << f->valueLen << "]";
+        ss << f->fieldOffset << "[" << f->valueOffset << "|"  << f->valueLen << "]";
     }
     return ss.str();
 };
@@ -180,7 +180,7 @@ TEST_P(RLPStreamParamTest, stream) {
 
     rlp_field_t fields[32];
     uint16_t fieldCount;
-    auto err = rlp_parseStream(data, dataSize, fields, 32, &fieldCount);
+    auto err = rlp_parseStream(data, 0, dataSize, fields, 32, &fieldCount);
     EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
     EXPECT_THAT(fieldCount, testing::Eq(params.expectedFieldCount));
 
@@ -197,7 +197,7 @@ TEST_P(RLPStreamParamTest, streamReadValues) {
 
     rlp_field_t fields[32];
     uint16_t fieldCount;
-    auto err = rlp_parseStream(data, dataSize, fields, 32, &fieldCount);
+    auto err = rlp_parseStream(data, 0, dataSize, fields, 32, &fieldCount);
     EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
     EXPECT_THAT(fieldCount, testing::Eq(params.expectedFieldCount));
 
@@ -216,7 +216,7 @@ TEST_P(RLPStreamParamTest, streamReadValues) {
                 break;
             }
             case RLP_KIND_STRING: {
-                uint8_t value[1000];
+                char value[1000];
                 err = rlp_readString(data, currentField, value, sizeof(value));
                 EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
                 ss << (char *) value;
