@@ -91,13 +91,13 @@ TEST(crypto, base58encoder2) {
 TEST(crypto, crc8) {
     uint8_t data[] = {'h', 'e', 'l', 'l', 'o', '!'};
 
-    EXPECT_THAT(crc8(data, 0), testing::Eq(0));
-    EXPECT_THAT(crc8(data, 1), testing::Eq(31));
-    EXPECT_THAT(crc8(data, 2), testing::Eq(97));
-    EXPECT_THAT(crc8(data, 3), testing::Eq(35));
-    EXPECT_THAT(crc8(data, 4), testing::Eq(234));
-    EXPECT_THAT(crc8(data, 5), testing::Eq(146));
-    EXPECT_THAT(crc8(data, 6), testing::Eq(16));
+    EXPECT_THAT(crc8(data, 0), testing::Eq(0x00));
+    EXPECT_THAT(crc8(data, 1), testing::Eq(0x1F));
+    EXPECT_THAT(crc8(data, 2), testing::Eq(0x61));
+    EXPECT_THAT(crc8(data, 3), testing::Eq(0x23));
+    EXPECT_THAT(crc8(data, 4), testing::Eq(0xEA));
+    EXPECT_THAT(crc8(data, 5), testing::Eq(0x92));
+    EXPECT_THAT(crc8(data, 6), testing::Eq(0x10));
 }
 
 TEST(crypto, keccak) {
@@ -110,13 +110,13 @@ TEST(crypto, keccak) {
 
     keccak(hash, sizeof(hash), data, sizeof(data));
 
-    for(int i=0; i<32; i++){
+    for (int i = 0; i < 32; i++) {
         EXPECT_THAT(hash[i], testing::Eq(expected[i]));
     }
 }
 
 TEST(crypto, ethAddress) {
-    uint8_t pubKey[64];
+    uint8_t pubKey[65];
     uint8_t expectedAddr[20];
     uint8_t ethAddr[20];
 
@@ -127,7 +127,7 @@ TEST(crypto, ethAddress) {
 
     ethAddressFromPubKey(ethAddr, pubKey);
 
-    for(int i=0; i<20; i++){
+    for (int i = 0; i < 20; i++) {
         EXPECT_THAT(ethAddr[i], testing::Eq(expectedAddr[i]));
     }
 }
@@ -141,5 +141,29 @@ TEST(crypto, manAddress) {
 
     EXPECT_THAT(address_len, testing::Eq(33));
     EXPECT_THAT(strlen(addr), testing::Eq(33));
+
     EXPECT_THAT((char *) addr, testing::StrEq("MAN.3egxFNEMZLVGA6fSLibszJMDUQSVf"));
+    EXPECT_THAT(strlen(addr), testing::Eq(33));
+}
+
+TEST(crypto, ledgerAddress) {
+    uint8_t pubKey[64];
+    uint8_t ethAddr[20];
+
+    const char *pubKeyHexString = "91c5822f1e8e096d5834c19f53933d9e1d9c653a52c7b7f27e35a202bb4d7d7"
+                                  "585f3fdd3d697185b9cd78a5d571281d7d96225042aa4bf26fec7b32d130416e7";
+
+    parseHexString(pubKeyHexString, pubKey);
+    EXPECT_THAT(strlen(pubKeyHexString), testing::Eq(128));
+
+    char addr[100];
+    ethAddressFromPubKey(ethAddr, pubKey);
+    uint8_t len = manAddressFromEthAddr(addr, ethAddr);
+
+    EXPECT_THAT((char *) addr, testing::StrEq("MAN.cUTaQZsmCAdpshzWnFiatff8QZHv"));
+    EXPECT_THAT(len, testing::Eq(strlen(addr)));
+
+    // Check CRC
+    const char crcByte = (uint8_t) encode_base58_clip(crc8((uint8_t *) addr, strlen(addr) - 1));
+    EXPECT_THAT(addr[len - 1], testing::Eq(crcByte));
 }
