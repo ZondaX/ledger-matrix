@@ -35,6 +35,7 @@ file(GLOB_RECURSE JSMN_SRC
 file(GLOB_RECURSE LIB_SRC
         tests/keccak-tiny.c
         src/ledger/src/lib/crypto.c
+        src/ledger/src/lib/utils.c
         src/ledger/src/lib/base58.c
         src/ledger/src/lib/rlp.c
         src/ledger/src/lib/mantx.c

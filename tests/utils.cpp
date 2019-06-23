@@ -14,41 +14,31 @@
 *  limitations under the License.
 ********************************************************************************/
 
-#include <cctype>
+#include "gmock/gmock.h"
+
+#include <cstdio>
+#include <iostream>
+#include <memory>
 #include <stdexcept>
-#include <cstring>
-#include "utils.h"
+#include <string>
+#include <array>
+#include <cctype>
+
+#include "lib/base58.h"
+#include "lib/crypto.h"
 #include "keccak.h"
+#include "lib/utils.h"
 
-uint8_t hex2dec(char c) {
-    c = std::tolower(c);
+TEST(utils, convertToHexInPlace) {
+    uint8_t data_in[] = {0, 1, 2, 5, 9, 250};
+    uint8_t data_out[11];
 
-    if (!std::isxdigit(c)) {
-        throw std::invalid_argument("invalid hexdigit");
-    }
+    MEMCPY(data_out, data_in, sizeof(data_in));
+    convertToHexstringInPlace(data_out, sizeof(data_in), sizeof(data_out));
 
-    if (std::isdigit(c)) {
-        return c - '0';
-    }
+    std::stringstream ss;
+    ss << (char*) data_out << std::endl;
 
-    return c - 'a' + 10;
-}
-
-size_t parseHexString(const char *s, uint8_t *out) {
-    size_t len = strlen(s);
-    if (len % 2 == 1) {
-        return 0;
-    }
-
-    for (int i = 0; i < len; i += 2) {
-        out[i >> 1u] = (hex2dec(s[i]) << 4u) + hex2dec(s[i + 1]);
-    }
-    return len >> 1u;
-};
-
-// https://github.com/debris/tiny-keccak
-// Parameters are based on
-// https://github.com/ethereum/solidity/blob/6bbedab383f7c8799ef7bcf4cad2bb008a7fcf2c/libdevcore/Keccak256.cpp
-void keccak(uint8_t *out, size_t out_len, uint8_t *in, size_t in_len) {
-    keccak_hash(out, out_len, in, in_len, 136, 0x01);
+    std::cout << std::endl;
+    std::cout << ss.str() << std::endl;
 }

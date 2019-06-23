@@ -27,7 +27,7 @@
 #include "lib/base58.h"
 #include "lib/crypto.h"
 #include "keccak.h"
-#include "utils.h"
+#include "test_utils.h"
 
 TEST(crypto, parseHexString) {
     char s[] = "1234567890";
