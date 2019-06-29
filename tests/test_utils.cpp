@@ -52,3 +52,4 @@ size_t parseHexString(const char *s, uint8_t *out) {
 void keccak(uint8_t *out, size_t out_len, uint8_t *in, size_t in_len) {
     keccak_hash(out, out_len, in, in_len, 136, 0x01);
 }
+

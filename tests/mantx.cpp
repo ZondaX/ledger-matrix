@@ -16,11 +16,10 @@
 
 #include "gmock/gmock.h"
 
-#include <cstdio>
 #include <iostream>
-#include <cctype>
 
 #include "lib/mantx.h"
+#include "view.h"
 #include "lib/uint256.h"
 #include "test_utils.h"
 
@@ -64,7 +63,7 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 0\n"
             "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
             "[10:0]  TxType = Normal\n"
-            "[11:0]  LockHeight = 0\n"},
+            "[11:0]  Lock Height = 0\n"},
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
         MANTxTestCase{
@@ -88,7 +87,7 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 0\n"
             "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
             "[10:0]  TxType = Authorize\n"
-            "[11:0]  LockHeight = 0\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -110,7 +109,7 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 0\n"
             "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
             "[10:0]  TxType = Authorize\n"
-            "[11:0]  LockHeight = 0\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -132,7 +131,7 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 0\n"
             "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
             "[10:0]  TxType = Authorize\n"
-            "[11:0]  LockHeight = 0\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -150,7 +149,7 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 49\n"
             "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
             "[10:0]  TxType = Normal\n"
-            "[11:0]  LockHeight = 0\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -168,7 +167,7 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 0\n"
             "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
             "[10:0]  TxType = Normal\n"
-            "[11:0]  LockHeight = 0\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -186,13 +185,15 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 0\n"
             "[9:0]  CommitTime = 19Jan1970 01:14:34\n"
             "[10:0]  TxType = Revocable\n"
-            "[11:0]  LockHeight = 0\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
         MANTxTestCase{
             "Example8",
-            "f8668710000000000045850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485a767950514b336341507980a0746dd5858305e95c2ad24ac22658786012963590e683258ab1b0b073a131adad038080808086016850894a0fc4c30480c0",
+            "f8668710000000000045850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485"
+            "a767950514b336341507980a0746dd5858305e95c2ad24ac22658786012963590e683258ab1b0b073a131"
+            "adad038080808086016850894a0fc4c30480c0",
             /////
             "[0:0]  Nonce = 4503599627370565\n"
             "[1:0]  Gas Price = 18000000000\n"
@@ -205,7 +206,7 @@ INSTANTIATE_TEST_SUITE_P(
             "[8:0]  IsEntrustTx = 0\n"
             "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
             "[10:0]  TxType = Revert\n"
-            "[11:0]  LockHeight = 0\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -258,7 +259,7 @@ INSTANTIATE_TEST_SUITE_P(
                       "[8:0]  IsEntrustTx = 0\n"
                       "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
                       "[10:0]  TxType = Authorize\n"
-                      "[11:0]  LockHeight = 0\n"
+                      "[11:0]  Lock Height = 0\n"
         },
         MANTxTestCase{"exampleTx2",
                       "f8c2"
@@ -291,7 +292,7 @@ INSTANTIATE_TEST_SUITE_P(
                       "[8:0]  IsEntrustTx = 0\n"
                       "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
                       "[10:0]  TxType = Normal\n"
-                      "[11:0]  LockHeight = 0\n"
+                      "[11:0]  Lock Height = 0\n"
         }
     ),
     MANTxParamTest::PrintToStringParamName()
@@ -341,16 +342,16 @@ TEST_P(MANTxParamTest, iterateDisplayStream) {
     std::stringstream ss;
     std::cout << std::endl;
 
-    char displayKey[80];
-    char displayValue[80];
+    char displayKey[MAX_CHARS_PER_KEY_LINE];
+    char displayValue[MAX_CHARS_PER_VALUE_LINE];
 
     int8_t displayIdx = 0;
     int8_t pageIdx = 0;
     uint8_t pageCount = 0;
     while (true) {
         err = mantx_getItem(&ctx, data, displayIdx,
-                            displayKey, sizeof(displayKey),
-                            displayValue, sizeof(displayValue),
+                            displayKey, MAX_CHARS_PER_KEY_LINE,
+                            displayValue, MAX_CHARS_PER_VALUE_LINE,
                             pageIdx, &pageCount);
 
         if (err != MANTX_NO_ERROR) {

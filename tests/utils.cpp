@@ -42,3 +42,28 @@ TEST(utils, convertToHexInPlace) {
     std::cout << std::endl;
     std::cout << ss.str() << std::endl;
 }
+
+TEST(utils, printTime1) {
+    time_t data_in = 1583402421;
+    char data_out[100];
+
+    printTime(data_out, sizeof(data_out), data_in);
+
+    std::stringstream ss;
+    ss << (char*) data_out;
+    std::cout << std::endl << ss.str() << std::endl;
+    EXPECT_THAT(ss.str(), ::testing::StrEq("20200305 10:00:21"));
+}
+
+TEST(utils, printTime2) {
+    time_t data_in = 1583402421;
+    char data_out[100];
+
+    printTime(data_out, sizeof(data_out), data_in);
+
+    std::stringstream ss;
+    ss << (char*) data_out;
+    std::cout << std::endl << ss.str() << std::endl;
+    EXPECT_THAT(ss.str(), ::testing::StrEq("20200305 10:00:21"));
+}
+
