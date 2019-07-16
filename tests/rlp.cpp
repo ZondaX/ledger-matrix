@@ -21,7 +21,7 @@
 #include <cctype>
 
 #include "lib/rlp.h"
-#include "utils.h"
+#include "test_utils.h"
 
 using ::testing::TestWithParam;
 using ::testing::Values;
@@ -110,7 +110,8 @@ INSTANTIATE_TEST_SUITE_P(
         RLPStreamTestCase{"string", "83050505", 1, "STRING@0[1|3]", "STRING=\x5\x5\x5"},
         RLPStreamTestCase{"string", "8405050505", 1, "STRING@0[1|4]", "STRING=\x5\x5\x5\x5"},
         RLPStreamTestCase{"string", "850505050505", 1, "STRING@0[1|5]", "STRING=\x5\x5\x5\x5\x5"},
-        RLPStreamTestCase{"string", "8D6162636465666768696A6B6C6D", 1, "STRING@0[1|13]", "STRING=abcdefghijklm"},
+        RLPStreamTestCase{"string", "8D6162636465666768696A6B6C6D", 1, "STRING@0[1|13]",
+                          "STRING=abcdefghijklm"},
         RLPStreamTestCase{"string", "820505820505", 2, "STRING@0[1|2]STRING@3[1|2]", "STRING=\x5\x5"},
         // [5, '444']
         RLPStreamTestCase{"list", "C50583343434", 1, "LIST@0[1|5]", "LIST=BYTE@1[0|0]STRING@2[1|3]"},
@@ -167,7 +168,7 @@ std::string dumpRLPFields(rlp_field_t *fields, uint8_t fieldCount) {
     for (int i = 0; i < fieldCount; i++) {
         rlp_field_t *f = fields + i;
         ss << getKind(f->kind) << "@";
-        ss << f->fieldOffset << "[" << f->valueOffset << "|"  << f->valueLen << "]";
+        ss << f->fieldOffset << "[" << f->valueOffset << "|" << f->valueLen << "]";
     }
     return ss.str();
 };
@@ -187,6 +188,76 @@ TEST_P(RLPStreamParamTest, stream) {
     auto s = dumpRLPFields(fields, fieldCount);
     std::cout << s << std::endl;
     EXPECT_THAT(s, testing::Eq(params.expectedFields));
+}
+
+TEST(RLPStreamParamTest, readStringPaging0) {
+    uint8_t data[10000];
+    const char *input = "8D6162636465666768696A6B6C6D";
+    uint64_t dataSize = parseHexString(input, data);
+
+    rlp_field_t fields[2];
+    uint16_t fieldCount;
+    auto err = rlp_parseStream(data, 0, dataSize, fields, 2, &fieldCount);
+    EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
+    EXPECT_THAT(fieldCount, testing::Eq(1));
+
+    std::stringstream ss;
+
+    // "abcdefghijklm"
+
+    char value[6];
+    uint8_t numPages;
+
+    for (int i = 0; i < 3; i++) {
+        uint16_t valueLen;
+        err = rlp_readStringPaging(data, fields + 0, value, sizeof(value) - 1, &valueLen, i, &numPages);
+        EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
+
+        if (i == 2) {
+            EXPECT_THAT(valueLen, testing::Eq(3));
+        } else{
+            EXPECT_THAT(valueLen, testing::Eq(5));
+        }
+
+        EXPECT_THAT(numPages, testing::Eq(3));
+        ss << "[" << i << "]" << value;
+    }
+
+    EXPECT_THAT(ss.str(), testing::StrEq("[0]abcde[1]fghij[2]klm"));
+}
+
+TEST(RLPStreamParamTest, readStringPaging1) {
+    uint8_t data[10000];
+    const char *input = "8E6162636465666768696A6B6C6D6E";
+    uint64_t dataSize = parseHexString(input, data);
+
+    rlp_field_t fields[2];
+    uint16_t fieldCount;
+    auto err = rlp_parseStream(data, 0,
+                               dataSize, fields,
+                               2, &fieldCount);
+    EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
+    EXPECT_THAT(fieldCount, testing::Eq(1));
+
+    std::stringstream ss;
+
+    // "abcdefghijklm"
+
+    char value[8];
+    uint8_t numPages;
+
+    for (int i = 0; i < 2; i++) {
+        uint16_t valueLen;
+        err = rlp_readStringPaging(data, fields + 0,
+                                   value, sizeof(value) - 1, &valueLen,
+                                   i, &numPages);
+        EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
+        EXPECT_THAT(numPages, testing::Eq(2));
+        EXPECT_THAT(valueLen, testing::Eq(7));
+        ss << "[" << i << "]" << value;
+    }
+
+    EXPECT_THAT(ss.str(), testing::StrEq("[0]abcdefg[1]hijklmn"));
 }
 
 TEST_P(RLPStreamParamTest, streamReadValues) {

@@ -16,13 +16,12 @@
 
 #include "gmock/gmock.h"
 
-#include <cstdio>
 #include <iostream>
-#include <cctype>
 
 #include "lib/mantx.h"
+#include "view.h"
 #include "lib/uint256.h"
-#include "utils.h"
+#include "test_utils.h"
 
 using ::testing::TestWithParam;
 using ::testing::Values;
@@ -54,18 +53,17 @@ INSTANTIATE_TEST_SUITE_P(
             "61754d61326d746e7778727363686a3271504a72458398968080038080808086016850894a0f"
             "c4c38080c0",
             ////
-            "Nonce = 4503599627370560\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 21000\n"
-            "To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
-            "Value = 10000000\n"
-            "Data = \n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 0\n"
-            "CommitTime = 15Jan2019 08:03:21\n"
-            "TxType = 0\n"
-            "LockHeight = 0\n"},
+            "[0:0]  Nonce = 4503599627370560\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 21000\n"
+            "[3:0]  To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
+            "[4:0]  Value = 10000000\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 0\n"
+            "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+            "[10:0]  TxType = Normal\n"
+            "[11:0]  Lock Height = 0\n"},
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
         MANTxTestCase{
@@ -76,18 +74,20 @@ INSTANTIATE_TEST_SUITE_P(
             "22c224973456e7472757374476173223a747275652c22456e73747275737453657454797065223"
             "a322c22456e7472757374436f756e74223a32307d5d038080808086016850894a0fc4c30580c0",
             ///////
-            "Nonce = 4503599627370561\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 210000\n"
-            "To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
-            "Value = 0\n"
-            "Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwLZz3bb4Tjfkg4myJ\",\"IsEntrustGas\":true,\"EnstrustSetType\":2,\"EntrustCount\":20}]\n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 0\n"
-            "CommitTime = 15Jan2019 08:03:21\n"
-            "TxType = 5\n"
-            "LockHeight = 0\n"
+            "[0:0]  Nonce = 4503599627370561\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 210000\n"
+            "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
+            "[4:0]  Value = 0\n"
+            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwLZz3\n"
+            "[5:1]  Data = bb4Tjfkg4myJ\",\"IsEntrustGas\":true,\"Enst\n"
+            "[5:2]  Data = rustSetType\":2,\"EntrustCount\":20}]\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 0\n"
+            "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+            "[10:0]  TxType = Authorize\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -95,18 +95,21 @@ INSTANTIATE_TEST_SUITE_P(
             "Example3",
             "f8d28710000000000042850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485a767950514b336341507980b88b5b7b22456e7472757374416464726573223a224d414e2e32556f7a3867386a61754d61326d746e7778727363686a3271504a7245222c224973456e7472757374476173223a747275652c22456e73747275737453657454797065223a312c22537461727454696d65223a313535393134353630302c22456e6454696d65223a313535393233323030307d5d038080808086016850894a0fc4c30580c0",
             /////
-            "Nonce = 4503599627370562\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 210000\n"
-            "To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
-            "Value = 0\n"
-            "Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\",\"IsEntrustGas\":true,\"EnstrustSetType\":1,\"StartTime\":1559145600,\"EndTime\":1559232000}]\n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 0\n"
-            "CommitTime = 15Jan2019 08:03:21\n"
-            "TxType = 5\n"
-            "LockHeight = 0\n"
+            "[0:0]  Nonce = 4503599627370562\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 210000\n"
+            "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
+            "[4:0]  Value = 0\n"
+            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2mtn\n"
+            "[5:1]  Data = wxrschj2qPJrE\",\"IsEntrustGas\":true,\"Ens\n"
+            "[5:2]  Data = trustSetType\":1,\"StartTime\":1559145600,\n"
+            "[5:3]  Data = \"EndTime\":1559232000}]\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 0\n"
+            "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+            "[10:0]  TxType = Authorize\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -114,18 +117,21 @@ INSTANTIATE_TEST_SUITE_P(
             "Example4",
             "f8cf8710000000000043850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485a767950514b336341507980b8885b7b22456e7472757374416464726573223a224d414e2e3661706346595162595a68774c5a7a33626234546a666b67346d794a222c224973456e7472757374476173223a747275652c22456e73747275737453657454797065223a302c225374617274486569676874223a323232323232322c22456e64486569676874223a323232323232357d5d038080808086016850894a0fc4c30580c0",
             /////
-            "Nonce = 4503599627370563\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 210000\n"
-            "To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
-            "Value = 0\n"
-            "Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwLZz3bb4Tjfkg4myJ\",\"IsEntrustGas\":true,\"EnstrustSetType\":0,\"StartHeight\":2222222,\"EndHeight\":2222225}]\n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 0\n"
-            "CommitTime = 15Jan2019 08:03:21\n"
-            "TxType = 5\n"
-            "LockHeight = 0\n"
+            "[0:0]  Nonce = 4503599627370563\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 210000\n"
+            "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
+            "[4:0]  Value = 0\n"
+            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwLZz3\n"
+            "[5:1]  Data = bb4Tjfkg4myJ\",\"IsEntrustGas\":true,\"Enst\n"
+            "[5:2]  Data = rustSetType\":0,\"StartHeight\":2222222,\"E\n"
+            "[5:3]  Data = ndHeight\":2222225}]\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 0\n"
+            "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+            "[10:0]  TxType = Authorize\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -133,18 +139,17 @@ INSTANTIATE_TEST_SUITE_P(
             "Example5",
             "f84a8710000000000043850430e2340083033450a14d414e2e32556f7a3867386a61754d61326d746e7778727363686a3271504a72458398968080038080803186016850894a0fc4c38080c0",
             /////
-            "Nonce = 4503599627370563\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 210000\n"
-            "To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
-            "Value = 10000000\n"
-            "Data = \n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 49\n"
-            "CommitTime = 15Jan2019 08:03:21\n"
-            "TxType = 0\n"
-            "LockHeight = 0\n"
+            "[0:0]  Nonce = 4503599627370563\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 210000\n"
+            "[3:0]  To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
+            "[4:0]  Value = 10000000\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 49\n"
+            "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+            "[10:0]  TxType = Normal\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -152,18 +157,17 @@ INSTANTIATE_TEST_SUITE_P(
             "Example6",
             "f8c28710000000000044850430e2340083033450a14d414e2e32556f7a3867386a61754d61326d746e7778727363686a3271504a72458398968080038080808086016850894a0ff87bf8798080f875e6a04d414e2e6a4c5446686f434a43474368706964553269433151357a436d56464c8398968080e6a04d414e2e66344657484562576b583873536438796a5a6a5948655a576e6164788398968080e6a04d414e2e675141414855655442787667627a6638744667557461764463654a508398968080",
             /////
-            "Nonce = 4503599627370564\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 210000\n"
-            "To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
-            "Value = 10000000\n"
-            "Data = \n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 0\n"
-            "CommitTime = 15Jan2019 08:03:21\n"
-            "TxType = 0\n"
-            "LockHeight = 0\n"
+            "[0:0]  Nonce = 4503599627370564\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 210000\n"
+            "[3:0]  To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
+            "[4:0]  Value = 10000000\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 0\n"
+            "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+            "[10:0]  TxType = Normal\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -171,37 +175,38 @@ INSTANTIATE_TEST_SUITE_P(
             "Example7",
             "f8488710000000000044850430e2340083033450a14d414e2e32556f7a3867386a61754d61326d746e7778727363686a3271504a724583989680800380808080845cf6bd8bc4c30380c0",
             /////
-            "Nonce = 4503599627370564\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 210000\n"
-            "To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
-            "Value = 10000000\n"
-            "Data = \n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 0\n"
-            "CommitTime = 19Jan1970 01:14:34\n"
-            "TxType = 3\n"
-            "LockHeight = 0\n"
+            "[0:0]  Nonce = 4503599627370564\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 210000\n"
+            "[3:0]  To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
+            "[4:0]  Value = 10000000\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 0\n"
+            "[9:0]  CommitTime = 19Jan1970 01:14:34\n"
+            "[10:0]  TxType = Revocable\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
         MANTxTestCase{
             "Example8",
-            "f8668710000000000045850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485a767950514b336341507980a0746dd5858305e95c2ad24ac22658786012963590e683258ab1b0b073a131adad038080808086016850894a0fc4c30480c0",
+            "f8668710000000000045850430e2340083033450a04d414e2e576b62756a7478683759426e6b475638485"
+            "a767950514b336341507980a0746dd5858305e95c2ad24ac22658786012963590e683258ab1b0b073a131"
+            "adad038080808086016850894a0fc4c30480c0",
             /////
-            "Nonce = 4503599627370565\n"
-            "Gas Price = 18000000000\n"
-            "Gas Limit = 210000\n"
-            "To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
-            "Value = 0\n"
-            "Data = tmՅ�\u0005�\\*�J�&Xx`\u0012�5��%����s�1��\n"
-            "ChainID = 3\n"
-            "EnterType = 0\n"
-            "IsEntrustTx = 0\n"
-            "CommitTime = 15Jan2019 08:03:21\n"
-            "TxType = 4\n"
-            "LockHeight = 0\n"
+            "[0:0]  Nonce = 4503599627370565\n"
+            "[1:0]  Gas Price = 18000000000\n"
+            "[2:0]  Gas Limit = 210000\n"
+            "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
+            "[4:0]  Value = 0\n"
+            "[5:0]  Data = 776DD5858305E95C2AD24AC22658786012963590E683258AB1B0B073A131ADAD\n"
+            "[6:0]  ChainID = 3\n"
+            "[7:0]  EnterType = 0\n"
+            "[8:0]  IsEntrustTx = 0\n"
+            "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+            "[10:0]  TxType = Revert\n"
+            "[11:0]  Lock Height = 0\n"
         },
         /////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////
@@ -233,18 +238,28 @@ INSTANTIATE_TEST_SUITE_P(
                       /*   */ "05"     // byte
                       /*   */ "80c0",  // string, list
             //////////// expected output:
-                      "Nonce = 0\n"
-                      "Gas Price = 18000000000\n"
-                      "Gas Limit = 210000\n"
-                      "To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
-                      "Value = 10000000\n"
-                      "Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\",\"IsEntrustGas\":true,\"IsEntrustSign\":false,\"StartHeight\":1222,\"EndHeight\":122222,\"EnstrustSetType\":0,\"useStartTime\":\"\",\"useEndTime\":\"\",\"EntrustCount\":0},{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\",\"IsEntrustGas\":true,\"IsEntrustSign\":false,\"StartHeight\":122223,\"EndHeight\":122229,\"EnstrustSetType\":0,\"useStartTime\":\"\",\"useEndTime\":\"\",\"EntrustCount\":0}]\n"
-                      "ChainID = 3\n"
-                      "EnterType = 0\n"
-                      "IsEntrustTx = 0\n"
-                      "CommitTime = 15Jan2019 08:03:21\n"
-                      "TxType = 5\n"
-                      "LockHeight = 0\n"
+                      "[0:0]  Nonce = 0\n"
+                      "[1:0]  Gas Price = 18000000000\n"
+                      "[2:0]  Gas Limit = 210000\n"
+                      "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
+                      "[4:0]  Value = 10000000\n"
+                      "[5:0]  Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2mtn\n"
+                      "[5:1]  Data = wxrschj2qPJrE\",\"IsEntrustGas\":true,\"IsE\n"
+                      "[5:2]  Data = ntrustSign\":false,\"StartHeight\":1222,\"E\n"
+                      "[5:3]  Data = ndHeight\":122222,\"EnstrustSetType\":0,\"u\n"
+                      "[5:4]  Data = seStartTime\":\"\",\"useEndTime\":\"\",\"Entrus\n"
+                      "[5:5]  Data = tCount\":0},{\"EntrustAddres\":\"MAN.2Uoz8g\n"
+                      "[5:6]  Data = 8jauMa2mtnwxrschj2qPJrE\",\"IsEntrustGas\"\n"
+                      "[5:7]  Data = :true,\"IsEntrustSign\":false,\"StartHeigh\n"
+                      "[5:8]  Data = t\":122223,\"EndHeight\":122229,\"EnstrustS\n"
+                      "[5:9]  Data = etType\":0,\"useStartTime\":\"\",\"useEndTime\n"
+                      "[5:10]  Data = \":\"\",\"EntrustCount\":0}]\n"
+                      "[6:0]  ChainID = 3\n"
+                      "[7:0]  EnterType = 0\n"
+                      "[8:0]  IsEntrustTx = 0\n"
+                      "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+                      "[10:0]  TxType = Authorize\n"
+                      "[11:0]  Lock Height = 0\n"
         },
         MANTxTestCase{"exampleTx2",
                       "f8c2"
@@ -267,18 +282,17 @@ INSTANTIATE_TEST_SUITE_P(
                       "6e6164788398968080e6a04d414e2e675141414855655442787667627a6638744667557461764463654a"
                       "508398968080",
             //////////// expected output:
-                      "Nonce = 4503599627370553\n"
-                      "Gas Price = 18000000000\n"
-                      "Gas Limit = 210000\n"
-                      "To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
-                      "Value = 10000000\n"
-                      "Data = \n"
-                      "ChainID = 3\n"
-                      "EnterType = 0\n"
-                      "IsEntrustTx = 0\n"
-                      "CommitTime = 15Jan2019 08:03:21\n"
-                      "TxType = 0\n"
-                      "LockHeight = 0\n"
+                      "[0:0]  Nonce = 4503599627370553\n"
+                      "[1:0]  Gas Price = 18000000000\n"
+                      "[2:0]  Gas Limit = 210000\n"
+                      "[3:0]  To = MAN.2Uoz8g8jauMa2mtnwxrschj2qPJrE\n"
+                      "[4:0]  Value = 10000000\n"
+                      "[6:0]  ChainID = 3\n"
+                      "[7:0]  EnterType = 0\n"
+                      "[8:0]  IsEntrustTx = 0\n"
+                      "[9:0]  CommitTime = 15Jan2019 08:03:21\n"
+                      "[10:0]  TxType = Normal\n"
+                      "[11:0]  Lock Height = 0\n"
         }
     ),
     MANTxParamTest::PrintToStringParamName()
@@ -309,7 +323,9 @@ TEST_P(MANTxParamTest, stream) {
     std::cout << std::endl;
 
     char out[1000];
-    mantx_print(&ctx, data, MANTX_FIELD_TO, out, 1000);
+    uint8_t pageCount = 0;
+    mantx_print(&ctx, data, MANTX_FIELD_TO, out, 1000, 0, &pageCount);
+    EXPECT_THAT(pageCount, testing::Eq(1));
     std::cout << "To:" << " " << out << std::endl;
 }
 
@@ -326,20 +342,36 @@ TEST_P(MANTxParamTest, iterateDisplayStream) {
     std::stringstream ss;
     std::cout << std::endl;
 
-    char displayKey[1000];
-    char displayValue[1000];
+    char displayKey[MAX_CHARS_PER_KEY_LINE];
+    char displayValue[MAX_CHARS_PER_VALUE_LINE];
 
     int8_t displayIdx = 0;
+    int8_t pageIdx = 0;
+    uint8_t pageCount = 0;
     while (true) {
-        err = mantx_getItem(&ctx, data, displayIdx, displayKey, 1000, displayValue, 1000);
+        err = mantx_getItem(&ctx, data, displayIdx,
+                            displayKey, MAX_CHARS_PER_KEY_LINE,
+                            displayValue, MAX_CHARS_PER_VALUE_LINE,
+                            pageIdx, &pageCount);
+
         if (err != MANTX_NO_ERROR) {
             if (err != MANTX_ERROR_UNEXPECTED_DISPLAY_IDX) {
                 ss << "ERR! " << (int) err << std::endl;
             }
             break;
         }
-        ss << displayKey << " = " << displayValue << std::endl;
-        displayIdx++;
+
+        if (pageIdx < pageCount) {
+            ss << "[" << (int) displayIdx << ":" << (int) pageIdx << "]  ";
+            ss << displayKey << " = " << displayValue;
+            ss << std::endl;
+            pageIdx++;
+        }
+
+        if (pageIdx >= pageCount) {
+            pageIdx = 0;
+            displayIdx++;
+        }
     }
 
     std::cout << ss.str() << std::endl;
