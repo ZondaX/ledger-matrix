@@ -79,9 +79,10 @@ INSTANTIATE_TEST_SUITE_P(
             "[2:0]  Gas Limit = 210000\n"
             "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
             "[4:0]  Value = 0\n"
-            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwLZz3\n"
-            "[5:1]  Data = bb4Tjfkg4myJ\",\"IsEntrustGas\":true,\"Enst\n"
-            "[5:2]  Data = rustSetType\":2,\"EntrustCount\":20}]\n"
+            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwL\n"
+            "[5:1]  Data = Zz3bb4Tjfkg4myJ\",\"IsEntrustGas\":true\n"
+            "[5:2]  Data = ,\"EnstrustSetType\":2,\"EntrustCount\":\n"
+            "[5:3]  Data = 20}]\n"
             "[6:0]  ChainID = 3\n"
             "[7:0]  EnterType = 0\n"
             "[8:0]  IsEntrustTx = 0\n"
@@ -100,10 +101,10 @@ INSTANTIATE_TEST_SUITE_P(
             "[2:0]  Gas Limit = 210000\n"
             "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
             "[4:0]  Value = 0\n"
-            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2mtn\n"
-            "[5:1]  Data = wxrschj2qPJrE\",\"IsEntrustGas\":true,\"Ens\n"
-            "[5:2]  Data = trustSetType\":1,\"StartTime\":1559145600,\n"
-            "[5:3]  Data = \"EndTime\":1559232000}]\n"
+            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2\n"
+            "[5:1]  Data = mtnwxrschj2qPJrE\",\"IsEntrustGas\":tru\n"
+            "[5:2]  Data = e,\"EnstrustSetType\":1,\"StartTime\":15\n"
+            "[5:3]  Data = 59145600,\"EndTime\":1559232000}]\n"
             "[6:0]  ChainID = 3\n"
             "[7:0]  EnterType = 0\n"
             "[8:0]  IsEntrustTx = 0\n"
@@ -122,10 +123,10 @@ INSTANTIATE_TEST_SUITE_P(
             "[2:0]  Gas Limit = 210000\n"
             "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
             "[4:0]  Value = 0\n"
-            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwLZz3\n"
-            "[5:1]  Data = bb4Tjfkg4myJ\",\"IsEntrustGas\":true,\"Enst\n"
-            "[5:2]  Data = rustSetType\":0,\"StartHeight\":2222222,\"E\n"
-            "[5:3]  Data = ndHeight\":2222225}]\n"
+            "[5:0]  Data = [{\"EntrustAddres\":\"MAN.6apcFYQbYZhwL\n"
+            "[5:1]  Data = Zz3bb4Tjfkg4myJ\",\"IsEntrustGas\":true\n"
+            "[5:2]  Data = ,\"EnstrustSetType\":0,\"StartHeight\":2\n"
+            "[5:3]  Data = 222222,\"EndHeight\":2222225}]\n"
             "[6:0]  ChainID = 3\n"
             "[7:0]  EnterType = 0\n"
             "[8:0]  IsEntrustTx = 0\n"
@@ -200,7 +201,8 @@ INSTANTIATE_TEST_SUITE_P(
             "[2:0]  Gas Limit = 210000\n"
             "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
             "[4:0]  Value = 0\n"
-            "[5:0]  Data = 776DD5858305E95C2AD24AC22658786012963590E683258AB1B0B073A131ADAD\n"
+            "[5:0]  Data = 776DD5858305E95C2AD24AC22658786012\n"
+            "[5:1]  Data = 993590E683258AB1B0B073A131ADAD\n"
             "[6:0]  ChainID = 3\n"
             "[7:0]  EnterType = 0\n"
             "[8:0]  IsEntrustTx = 0\n"
@@ -243,17 +245,18 @@ INSTANTIATE_TEST_SUITE_P(
                       "[2:0]  Gas Limit = 210000\n"
                       "[3:0]  To = MAN.Wkbujtxh7YBnkGV8HZvyPQK3cAPy\n"
                       "[4:0]  Value = 10000000\n"
-                      "[5:0]  Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2mtn\n"
-                      "[5:1]  Data = wxrschj2qPJrE\",\"IsEntrustGas\":true,\"IsE\n"
-                      "[5:2]  Data = ntrustSign\":false,\"StartHeight\":1222,\"E\n"
-                      "[5:3]  Data = ndHeight\":122222,\"EnstrustSetType\":0,\"u\n"
-                      "[5:4]  Data = seStartTime\":\"\",\"useEndTime\":\"\",\"Entrus\n"
-                      "[5:5]  Data = tCount\":0},{\"EntrustAddres\":\"MAN.2Uoz8g\n"
-                      "[5:6]  Data = 8jauMa2mtnwxrschj2qPJrE\",\"IsEntrustGas\"\n"
-                      "[5:7]  Data = :true,\"IsEntrustSign\":false,\"StartHeigh\n"
-                      "[5:8]  Data = t\":122223,\"EndHeight\":122229,\"EnstrustS\n"
-                      "[5:9]  Data = etType\":0,\"useStartTime\":\"\",\"useEndTime\n"
-                      "[5:10]  Data = \":\"\",\"EntrustCount\":0}]\n"
+                      "[5:0]  Data = [{\"EntrustAddres\":\"MAN.2Uoz8g8jauMa2\n"
+                      "[5:1]  Data = mtnwxrschj2qPJrE\",\"IsEntrustGas\":tru\n"
+                      "[5:2]  Data = e,\"IsEntrustSign\":false,\"StartHeight\n"
+                      "[5:3]  Data = \":1222,\"EndHeight\":122222,\"EnstrustS\n"
+                      "[5:4]  Data = etType\":0,\"useStartTime\":\"\",\"useEndT\n"
+                      "[5:5]  Data = ime\":\"\",\"EntrustCount\":0},{\"EntrustA\n"
+                      "[5:6]  Data = ddres\":\"MAN.2Uoz8g8jauMa2mtnwxrschj2\n"
+                      "[5:7]  Data = qPJrE\",\"IsEntrustGas\":true,\"IsEntrus\n"
+                      "[5:8]  Data = tSign\":false,\"StartHeight\":122223,\"E\n"
+                      "[5:9]  Data = ndHeight\":122229,\"EnstrustSetType\":0\n"
+                      "[5:10]  Data = ,\"useStartTime\":\"\",\"useEndTime\":\"\",\"\n"
+                      "[5:11]  Data = EntrustCount\":0}]\n"
                       "[6:0]  ChainID = 3\n"
                       "[7:0]  EnterType = 0\n"
                       "[8:0]  IsEntrustTx = 0\n"
@@ -343,7 +346,7 @@ TEST_P(MANTxParamTest, iterateDisplayStream) {
     std::cout << std::endl;
 
     char displayKey[MAX_CHARS_PER_KEY_LINE];
-    char displayValue[MAX_CHARS_PER_VALUE_LINE];
+    char displayValue[MAX_CHARS_PER_VALUE1_LINE];
 
     int8_t displayIdx = 0;
     int8_t pageIdx = 0;
@@ -351,7 +354,7 @@ TEST_P(MANTxParamTest, iterateDisplayStream) {
     while (true) {
         err = mantx_getItem(&ctx, data, displayIdx,
                             displayKey, MAX_CHARS_PER_KEY_LINE,
-                            displayValue, MAX_CHARS_PER_VALUE_LINE,
+                            displayValue, MAX_CHARS_PER_VALUE1_LINE,
                             pageIdx, &pageCount);
 
         if (err != MANTX_NO_ERROR) {
