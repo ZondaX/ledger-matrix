@@ -65,10 +65,6 @@ delete:
 	BOLOS_SDK=$(CURDIR)/deps/nanos-secure-sdk BOLOS_ENV=/opt/bolos \
 	make -C $(LEDGER_SRC) delete
 
-init:
-	@echo "Initializing device with test mnemonic! WARNING TAKES 2 MINUTES AND REQUIRES RECOVERY MODE"
-	@python -m ledgerblue.hostOnboard --apdu --id 0 --prefix "" --passphrase "" --pin 5555 --words "equip will roof matter pink blind book anxiety banner elbow sun young"
-
 # This target will initialize the device with the integration testing mnemonic
 dev_init:
 	@echo "Initializing device with test mnemonic! WARNING TAKES 2 MINUTES AND REQUIRES RECOVERY MODE"
@@ -80,3 +76,10 @@ dev_ca:
 
 dev_ca_delete:
 	@python -m ledgerblue.resetCustomCA --targetId 0x31100004
+
+# This target will setup a custom developer certificate
+dev_ca2:
+	@python -m ledgerblue.setupCustomCA --targetId 0x33000004 --public $(SCP_PUBKEY) --name zondax
+
+dev_ca_delete2:
+	@python -m ledgerblue.resetCustomCA --targetId 0x33000004

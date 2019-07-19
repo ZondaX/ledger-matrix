@@ -20,6 +20,7 @@
 
 #include "lib/mantx.h"
 #include "view.h"
+#include "view_internal.h"
 #include "lib/uint256.h"
 #include "test_utils.h"
 

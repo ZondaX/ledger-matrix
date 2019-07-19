@@ -43,6 +43,20 @@ TEST(utils, convertToHexInPlace) {
     std::cout << ss.str() << std::endl;
 }
 
+TEST(utils, convertToHexInPlaceBig) {
+    uint8_t data_in[] = {0, 1, 2, 5, 9, 250};
+    uint8_t data_out[160];
+
+    MEMCPY(data_out, data_in, sizeof(data_in));
+    convertToHexstringInPlace(data_out, sizeof(data_in), sizeof(data_out));
+
+    std::stringstream ss;
+    ss << (char*) data_out << std::endl;
+
+    std::cout << std::endl;
+    std::cout << ss.str() << std::endl;
+}
+
 TEST(utils, printTime1) {
     time_t data_in = 1583402421;
     char data_out[100];
