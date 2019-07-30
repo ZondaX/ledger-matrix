@@ -1,4 +1,4 @@
-#Tendermint/Cosmos Apps for Ledger Nano S
+#Matrix AI app for Ledger Nano S/X
 
 ## Get source
 Apart from cloning, be sure you get all the submodules, by calling:
