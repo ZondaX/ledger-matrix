@@ -81,3 +81,15 @@ TEST(utils, printTime2) {
     EXPECT_THAT(ss.str(), ::testing::StrEq("18Jul2019 20:37:05"));
 }
 
+TEST(utils, printTime3) {
+    time_t data_in = 1564545105;
+    char data_out[100];
+
+    printTime(data_out, sizeof(data_out), data_in);
+
+    std::stringstream ss;
+    ss << (char*) data_out;
+    std::cout << std::endl << ss.str() << std::endl;
+    EXPECT_THAT(ss.str(), ::testing::StrEq("31Jul2019 03:51:45"));
+}
+
