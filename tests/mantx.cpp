@@ -318,21 +318,6 @@ INSTANTIATE_TEST_SUITE_P(
                       "[9:0]  CommitTime = 31Jul2019 03:51:45\n"
                       "[10:0]  TxType = Create curr\n"
                       "[11:0]  Lock Height = 0\n"
-        },
-        MANTxTestCase{"issue_badtxtype",
-                      "f8498710000000000014850430e23400825208a14d414e2e32556f7a3867386a61754d61326d746e7778727363686a3271504a724583989680800380808080845c3d93c9c6c58203e880c0",
-            //////////// expected output:
-                      "[0:0]  Nonce = 0\n"
-                      "[1:0]  Gas Price = 18000000000\n"
-                      "[2:0]  Gas Limit = 210000\n"
-                      "[3:0]  To = MAN.5xYzBHrJfXeJi9yQ8Qq8hvm19bU4\n"
-                      "[4:0]  Value = 0\n"
-                      "[6:0]  ChainID = 3\n"
-                      "[7:0]  EnterType = 0\n"
-                      "[8:0]  IsEntrustTx = 0\n"
-                      "[9:0]  CommitTime = 31Jul2019 03:51:45\n"
-                      "[10:0]  TxType = Create curr\n"
-                      "[11:0]  Lock Height = 0\n"
         }
     ),
     MANTxParamTest::PrintToStringParamName()

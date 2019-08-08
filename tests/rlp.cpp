@@ -210,7 +210,8 @@ TEST(RLPStreamParamTest, readStringPaging0) {
 
     for (int i = 0; i < 3; i++) {
         uint16_t valueLen;
-        err = rlp_readStringPaging(data, fields + 0, value, sizeof(value) - 1, &valueLen, i, &numPages);
+        uint16_t maxValueLen = sizeof(value);
+        err = rlp_readStringPaging(data, fields + 0, value, maxValueLen, &valueLen, i, &numPages);
         EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
 
         if (i == 2) {
@@ -249,7 +250,7 @@ TEST(RLPStreamParamTest, readStringPaging1) {
     for (int i = 0; i < 2; i++) {
         uint16_t valueLen;
         err = rlp_readStringPaging(data, fields + 0,
-                                   value, sizeof(value) - 1, &valueLen,
+                                   value, sizeof(value), &valueLen,
                                    i, &numPages);
         EXPECT_THAT(err, testing::Eq(RLP_NO_ERROR));
         EXPECT_THAT(numPages, testing::Eq(2));
