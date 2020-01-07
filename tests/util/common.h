@@ -1,5 +1,5 @@
 /*******************************************************************************
-*   (c) 2018 ZondaX GmbH
+*   (c) 2019 ZondaX GmbH
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -16,19 +16,11 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <cstddef>
+#include <lib/parser_impl.h>
+#include <vector>
 
-uint8_t hex2dec(char c);
+#define EXPECT_EQ_STR(_STR1, _STR2, _ERROR_MESSAGE) { if (_STR1 != nullptr & _STR2 != nullptr) \
+EXPECT_TRUE(!strcmp(_STR1, _STR2)) << _ERROR_MESSAGE << ", expected: " << _STR2 << ", received: " << _STR1; \
+else FAIL() << "One of the strings is null"; }
 
-size_t parseHexString(const char *s, uint8_t *out);
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void keccak(uint8_t *out, size_t out_len, uint8_t *in, size_t in_len);
-
-#ifdef __cplusplus
-}
-#endif
+std::vector<std::string> dumpUI(parser_context_t *ctx, uint16_t maxKeyLen, uint16_t maxValueLen);

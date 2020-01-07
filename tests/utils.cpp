@@ -24,10 +24,10 @@
 #include <array>
 #include <cctype>
 
-#include "lib/base58.h"
 #include "lib/crypto.h"
-#include "keccak.h"
-#include "lib/utils.h"
+#include "mocks/keccak.h"
+#include "utils/base58.h"
+#include "utils/utils.h"
 
 TEST(utils, convertToHexInPlace) {
     uint8_t data_in[] = {0, 1, 2, 5, 9, 250};

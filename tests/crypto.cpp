@@ -23,41 +23,12 @@
 #include <string>
 #include <array>
 #include <cctype>
+#include <lib/crypto.h>
+#include <hexutils.h>
 
-#include "lib/base58.h"
-#include "lib/crypto.h"
-#include "keccak.h"
-#include "test_utils.h"
-
-TEST(crypto, parseHexString) {
-    char s[] = "1234567890";
-    uint8_t data[100];
-
-    auto length = parseHexString(s, data);
-
-    ASSERT_THAT(length, testing::Eq(5));
-
-    ASSERT_THAT(data[0], testing::Eq(0x12));
-    ASSERT_THAT(data[1], testing::Eq(0x34));
-    ASSERT_THAT(data[2], testing::Eq(0x56));
-    ASSERT_THAT(data[3], testing::Eq(0x78));
-    ASSERT_THAT(data[4], testing::Eq(0x90));
-}
-
-TEST(crypto, parseHexString2) {
-    char s[] = "be333be7ee";
-    uint8_t data[100];
-
-    auto length = parseHexString(s, data);
-
-    ASSERT_THAT(length, testing::Eq(5));
-
-    ASSERT_THAT(data[0], testing::Eq(0xbe));
-    ASSERT_THAT(data[1], testing::Eq(0x33));
-    ASSERT_THAT(data[2], testing::Eq(0x3b));
-    ASSERT_THAT(data[3], testing::Eq(0xe7));
-    ASSERT_THAT(data[4], testing::Eq(0xee));
-}
+#include "utils/base58.h"
+#include "utils/utils.h"
+#include "mocks/keccak.h"
 
 TEST(crypto, base58encoder) {
     uint8_t data[] = {1, 2, 6, 4, 5, 6};
@@ -75,7 +46,7 @@ TEST(crypto, base58encoder) {
 
 TEST(crypto, base58encoder2) {
     uint8_t data[20];
-    parseHexString("be333be7ee87c31f73d7359dd6228270845c563a", data);
+    parseHexString(data, sizeof(data), "be333be7ee87c31f73d7359dd6228270845c563a");
 
     uint8_t out[40];
     size_t outlen = 40;
@@ -106,9 +77,9 @@ TEST(crypto, keccak) {
     uint8_t expected[32];
 
     const char *s = "96b8d442f4c09a08d266bf37b18219465cfb341c1b3ab9792a6103a93583fdf7";
-    parseHexString(s, expected);
+    parseHexString(expected, sizeof(expected), s);
 
-    keccak(hash, sizeof(hash), data, sizeof(data));
+    keccak_hash(hash, sizeof(hash), data, sizeof(data), 136, 0x01);
 
     for (int i = 0; i < 32; i++) {
         EXPECT_THAT(hash[i], testing::Eq(expected[i]));
@@ -120,10 +91,11 @@ TEST(crypto, ethAddress) {
     uint8_t expectedAddr[20];
     uint8_t ethAddr[20];
 
-    parseHexString("bf3888e9b2ef0b7b22498c01ead61485da023675502b098c764be22d585d379a"
-                   "8cbf57f818d7b0154ccce67916bf752d65b27632ea9c4f9ce7ecb661ffd05945",
-                   pubKey);
-    parseHexString("be333be7ee87c31f73d7359dd6228270845c563a", expectedAddr);
+    parseHexString(pubKey, sizeof(pubKey),
+            "bf3888e9b2ef0b7b22498c01ead61485da023675502b098c764be22d585d379a"
+            "8cbf57f818d7b0154ccce67916bf752d65b27632ea9c4f9ce7ecb661ffd05945");
+    parseHexString(expectedAddr, sizeof(expectedAddr),
+                   "be333be7ee87c31f73d7359dd6228270845c563a");
 
     ethAddressFromPubKey(ethAddr, pubKey);
 
@@ -134,7 +106,8 @@ TEST(crypto, ethAddress) {
 
 TEST(crypto, manAddress) {
     uint8_t ethAddr[20];
-    parseHexString("be333be7ee87c31f73d7359dd6228270845c563a", ethAddr);
+    parseHexString(ethAddr, sizeof(ethAddr),
+                   "be333be7ee87c31f73d7359dd6228270845c563a");
 
     char addr[100];
     uint8_t address_len = manAddressFromEthAddr(addr, ethAddr);
@@ -153,7 +126,7 @@ TEST(crypto, ledgerAddress) {
     const char *pubKeyHexString = "91c5822f1e8e096d5834c19f53933d9e1d9c653a52c7b7f27e35a202bb4d7d7"
                                   "585f3fdd3d697185b9cd78a5d571281d7d96225042aa4bf26fec7b32d130416e7";
 
-    parseHexString(pubKeyHexString, pubKey);
+    parseHexString(pubKey, sizeof(pubKey), pubKeyHexString);
     EXPECT_THAT(strlen(pubKeyHexString), testing::Eq(128));
 
     char addr[100];

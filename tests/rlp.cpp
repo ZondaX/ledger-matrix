@@ -16,12 +16,10 @@
 
 #include "gmock/gmock.h"
 
-#include <cstdio>
 #include <iostream>
-#include <cctype>
+#include <hexutils.h>
 
 #include "lib/rlp.h"
-#include "test_utils.h"
 
 using ::testing::TestWithParam;
 using ::testing::Values;
@@ -64,7 +62,7 @@ TEST_P(RLPDecodeTest, decodeElement) {
     auto params = GetParam();
 
     uint8_t data[100];
-    parseHexString(params.data, data);
+    parseHexString(data, sizeof(data), params.data);
 
     uint8_t kind;
     uint16_t len;
@@ -177,7 +175,7 @@ TEST_P(RLPStreamParamTest, stream) {
     auto params = GetParam();
 
     uint8_t data[10000];
-    uint64_t dataSize = parseHexString(params.data, data);
+    uint64_t dataSize = parseHexString(data, sizeof(data), params.data);
 
     rlp_field_t fields[32];
     uint16_t fieldCount;
@@ -193,7 +191,7 @@ TEST_P(RLPStreamParamTest, stream) {
 TEST(RLPStreamParamTest, readStringPaging0) {
     uint8_t data[10000];
     const char *input = "8D6162636465666768696A6B6C6D";
-    uint64_t dataSize = parseHexString(input, data);
+    uint64_t dataSize = parseHexString(data, sizeof(data), input);
 
     rlp_field_t fields[2];
     uint16_t fieldCount;
@@ -230,7 +228,7 @@ TEST(RLPStreamParamTest, readStringPaging0) {
 TEST(RLPStreamParamTest, readStringPaging1) {
     uint8_t data[10000];
     const char *input = "8E6162636465666768696A6B6C6D6E";
-    uint64_t dataSize = parseHexString(input, data);
+    uint64_t dataSize = parseHexString(data, sizeof(data), input);
 
     rlp_field_t fields[2];
     uint16_t fieldCount;
@@ -265,7 +263,7 @@ TEST_P(RLPStreamParamTest, streamReadValues) {
     auto params = GetParam();
 
     uint8_t data[10000];
-    uint64_t dataSize = parseHexString(params.data, data);
+    uint64_t dataSize = parseHexString(data, sizeof(data), params.data);
 
     rlp_field_t fields[32];
     uint16_t fieldCount;

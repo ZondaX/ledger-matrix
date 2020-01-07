@@ -17,53 +17,67 @@ cmake_minimum_required(VERSION 3.0)
 project(ledger-matrix VERSION 0.0.0)
 enable_testing()
 
+cmake_policy(SET CMP0025 NEW)
 set(CMAKE_CXX_STANDARD 11)
+
+include(cmake/conan/CMakeLists.txt)
 add_subdirectory(cmake/gtest)
 
-string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
-string(APPEND CMAKE_LINKER_FLAGS_DEBUG " -fsanitize=address -fno-omit-frame-pointer")
-#string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=undefined")
-#string(APPEND CMAKE_LINKER_FLAGS_DEBUG " -fsanitize=undefined")
+string(APPEND CMAKE_CXX_FLAGS " -fsanitize=address -fno-omit-frame-pointer")
+string(APPEND CMAKE_LINKER_FLAGS " -fsanitize=address -fno-omit-frame-pointer")
 
 ##############################################################
 ##############################################################
 #  static libs
-file(GLOB_RECURSE JSMN_SRC
-#        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src/jsmn.c
+file(GLOB_RECURSE TINY_KECCAK_SRC
+        src/ledger/src/mocks/keccak-tiny.c
         )
 
 file(GLOB_RECURSE LIB_SRC
-        tests/keccak-tiny.c
-        src/ledger/src/lib/crypto.c
-        src/ledger/src/lib/utils.c
-        src/ledger/src/lib/base58.c
-        src/ledger/src/lib/rlp.c
-        src/ledger/src/lib/mantx.c
-        src/ledger/src/lib/uint256.c
-#        src/ledger/src/lib/json_parser.c
-#        src/ledger/src/lib/tx_parser.c
-#        src/ledger/src/lib/tx_display.c
-#        src/ledger/src/lib/tx_validate.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/ledger-zxlib/src/zxmacros.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/ledger-zxlib/src/hexutils.c
+        #########
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src/lib/crypto.c
+        src/ledger/src/utils/utils.c
+        src/ledger/src/utils/base58.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src/lib/rlp.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src/lib/mantx.c
+        src/ledger/src/utils/uint256.c
+        #########
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src/lib/parser.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src/lib/parser_impl.c
         )
-file(GLOB_RECURSE TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp)
 
-add_library(app_lib STATIC ${LIB_SRC} ${JSMN_SRC})
+add_library(app_lib STATIC ${LIB_SRC} ${TINY_KECCAK_SRC})
 target_include_directories(app_lib PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src/lib
         ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/ledger-zxlib/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/lib
-#        ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src
         )
+
+##############################################################
+##############################################################
+#  Tests
+file(GLOB_RECURSE TESTS_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp)
 
 add_executable(unittests ${TESTS_SRC})
-target_include_directories(unittests PRIVATE
+target_include_directories(unittests PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src
         ${gtest_SOURCE_DIR}/include
         ${gmock_SOURCE_DIR}/include
+        ${CONAN_INCLUDE_DIRS_FMT}
+        ${CONAN_INCLUDE_DIRS_JSONCPP}
         )
-target_link_libraries(unittests gtest_main app_lib)
-target_link_libraries(unittests gtest_main)
 
-add_test(gtest ${PROJECT_BINARY_DIR}/unittests)
+target_link_libraries(unittests PRIVATE
+        gtest_main
+        app_lib
+        CONAN_PKG::fmt
+        CONAN_PKG::jsoncpp)
+
+add_test(unittests ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/unittests)
+set_tests_properties(unittests PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
 ###############################################################
 # Force tests to depend from app compiling
@@ -76,9 +90,5 @@ add_test(gtest ${PROJECT_BINARY_DIR}/unittests)
 #            COMMAND make build
 #            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 #            )
-#    target_include_directories(ledger_app PUBLIC
-#            ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/src
-#            ${CMAKE_CURRENT_SOURCE_DIR}/src/ledger/deps/jsmn/src
-#            )
-#    add_dependencies(tests ledger_app)
+#    add_dependencies(unittests ledger_app)
 #endif()

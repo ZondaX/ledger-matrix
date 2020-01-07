@@ -3,4 +3,4 @@
 	url = https://github.com/zondax/ledger-matrix-app
 [submodule "deps/nanos-secure-sdk"]
 	path = deps/nanos-secure-sdk
-	url = git@github.com:LedgerHQ/nanos-secure-sdk.git
+	url = https://github.com/LedgerHQ/nanos-secure-sdk.git

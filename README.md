@@ -1,6 +1,6 @@
 # Ledger-Matrix
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![CircleCI](https://circleci.com/gh/ZondaX/ledger-matrix.svg?style=shield)](https://circleci.com/gh/ZondaX/ledger-matrix)
+[![CircleCI](https://circleci.com/gh/Zondax/ledger-matrix.svg?style=shield)](https://circleci.com/gh/Zondax/ledger-matrix)
 
 This repository contains the Ledger Nano S/X app for Matrix
 
