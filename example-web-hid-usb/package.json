@@ -1,0 +1,30 @@
+{
+  "name": "example-web-hid-usb",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.html",
+  "dependencies": {
+    "@ledgerhq/hw-app-btc": "^6.24.1",
+    "@ledgerhq/hw-transport-node-hid": "^6.27.21",
+    "@ledgerhq/hw-transport-webhid": "^6.24.1",
+    "@ledgerhq/hw-transport-webusb": "^6.24.1",
+    "@ledgerhq/logs": "^6.10.0",
+    "@zondax/ledger-matrix": "^0.0.2",
+    "core-js": "^3.21.1"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.0.0",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0"
+  },
+  "scripts": {
+    "build": "parcel build",
+    "start": "parcel"
+  },
+  "author": "",
+  "license": "ISC",
+  "alias": {
+    "@ledgerhq/devices": "@ledgerhq/devices/lib-es"
+  }
+}
