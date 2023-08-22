@@ -60,3 +60,48 @@ describe.each(MATRIX_TRANSACTIONS)('Transactions', function (data) {
     }
   })
 })
+
+describe('Custom', function () {
+
+  test.concurrent.each(models)('Transaction error', async function (m) {
+    const sim = new Zemu(m.path)
+    try {
+      await sim.start({ ...defaultOptions, model: m.name })
+      const app = new MatrixAIApp(sim.getTransport())
+
+      const PATH = "m/44'/318'/0'/0/0";
+      const BLOB = Buffer.from("f84d8710000000000000850430e2340083033450a14d414e2e3246745a483939796f533747695564516a64514c553534364e65474739880de0b6b3a76400008001808080808464c3d5f5c4c38080c0", 'hex');
+
+      const responseAddr = await app.getAddressAndPubKey(PATH)
+
+      // do not wait here.. we need to navigate
+      const signatureRequest = app.sign(PATH, BLOB)
+
+      // Wait until we are not in the main menu
+      await sim.waitUntilScreenIsNot(sim.getMainMenuSnapshot())
+      await sim.compareSnapshotsAndApprove('.', `${m.prefix.toLowerCase()}-custom`)
+
+      const signatureResponse = await signatureRequest
+      console.log(signatureResponse)
+
+      expect(signatureResponse.returnCode).toEqual(0x9000)
+      expect(signatureResponse.errorMessage).toEqual('No errors')
+
+      // Now verify the signature
+      const msgHash = keccak256(BLOB)
+
+      const emptyBuffer = Buffer.from([])
+      const pubKey = responseAddr.publicKey ?? emptyBuffer
+
+      const signatureDER = signatureImport(signatureResponse.signatureDER ?? emptyBuffer)
+      const signatureRS = signatureResponse.signatureRSV?.subarray(0, -1)
+      const signatureOk = ecdsaVerify(signatureRS ?? emptyBuffer, msgHash, pubKey) && ecdsaVerify(signatureDER, msgHash, pubKey)
+
+      expect(signatureOk).toEqual(true)
+
+
+    } finally {
+      await sim.close()
+    }
+  })
+})
