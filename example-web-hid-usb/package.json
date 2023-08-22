@@ -19,7 +19,6 @@
     "stream-browserify": "^3.0.0"
   },
   "scripts": {
-    "build": "parcel build",
     "start": "parcel"
   },
   "author": "",
